@@ -1,69 +1,25 @@
-name: CI
+name: Publish Packages
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
-defaults:
-  run:
-    working-directory: src
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Fetch all history for all tags and branches
-      run: git fetch --prune --unshallow
-
-    - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v0.9.2
-      with:
-        versionSpec: '5.2.x'        
-
-    - name: Use GitVersion
-      id: gitversion # step id used as reference for output values
-      uses: gittools/actions/gitversion/execute@v0.9.2   
-    - run: |
-          echo "Major: ${{ steps.gitversion.outputs.major }}"
-          echo "Minor: ${{ steps.gitversion.outputs.minor }}"
-          echo "Patch: ${{ steps.gitversion.outputs.patch }}"
-          echo "SemVer: ${{ steps.gitversion.outputs.semVer }}"
-          echo "NuGetVersionV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}"
-          echo "NuGetVersion: ${{ steps.gitversion.outputs.nuGetVersion }}"
-          echo "NuGetPreReleaseTagV2: ${{ steps.gitversion.outputs.nuGetPreReleaseTagV2 }}"
-          echo "NuGetPreReleaseTag: ${{ steps.gitversion.outputs.nuGetPreReleaseTag }}"
-          echo "VersionSourceSha: ${{ steps.gitversion.outputs.versionSourceSha }}"
-          echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.commitsSinceVersionSource }}"
-          echo "CommitsSinceVersionSourcePadded: ${{ steps.gitversion.outputs.commitsSinceVersionSourcePadded }}"
-          echo "CommitDate: ${{ steps.gitversion.outputs.commitDate }}"
-
+    - uses: actions/checkout@v2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
-
     - name: Install dependencies
       run: dotnet restore
-
     - name: Build
       run: dotnet build --configuration Release --no-restore
-
-    - name: Nuget Pack
-      if: ${{ github.event_name == 'push' }}
-      run: dotnet pack Sendbird.csproj --configuration Release --no-build -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }} -o output
-
-    - name: Upload artifact
-      if: ${{ github.event_name == 'push' }}
-      uses: actions/upload-artifact@v1.0.0
+    - name: Publish Sendbird
+      uses: brandedoutcast/publish-nuget@v2.5.2
       with:
-        name: Sendbird
-        path: src/output
-
-    - name: Push to Nuget.org
-      if: ${{ github.event_name == 'push' }}
-      run: dotnet nuget push output/*.nupkg  --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+          PROJECT_FILE_PATH: Sendbird/Sendbird.csproj
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
