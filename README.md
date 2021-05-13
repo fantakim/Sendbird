@@ -1,6 +1,6 @@
 # Sendbird
 
-![Nuget](https://img.shields.io/nuget/v/Sendbird)
+[![Nuget](https://img.shields.io/nuget/v/Sendbird)](https://www.nuget.org/packages/Sendbird)
 [![.NET Standard](https://img.shields.io/badge/.NET%20Standard-%3E%3D%202.0-red.svg)](#)
 
 ## Description
