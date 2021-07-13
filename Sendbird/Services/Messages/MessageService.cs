@@ -1,6 +1,7 @@
 ﻿using Sendbird.Core;
 using Sendbird.Entities;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Sendbird.Services.Messages
@@ -152,6 +153,26 @@ namespace Sendbird.Services.Messages
         public virtual Task UpdateMessageAsync(string channelType, string channelUrl, long messageId, MessageUpdateOptions options, RequestOptions requestOptions = null)
         {
             return this.RequestAsync(HttpMethod.Post, $"/{channelType}/{channelUrl}/messages/{messageId}", options, requestOptions);
+        }
+
+        public virtual MessageList List(GroupChannel channel, MessageListOptions options, RequestOptions requestOptions = null)
+        {
+            return this.Request<MessageList>(HttpMethod.Get, $"/{GROUP_CHANNEL_PATH}/{channel.ChannelUrl}/messages", options, requestOptions);
+        }
+
+        public virtual MessageList List(string channelType, string channelUrl, MessageListOptions options = null, RequestOptions requestOptions = null)
+        {
+            return this.Request<MessageList>(HttpMethod.Get, $"/{channelType}/{channelUrl}/messages", options, requestOptions);
+        }
+
+        public virtual Task<MessageList> ListAsync(GroupChannel channel, MessageListOptions options, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
+        {
+            return this.RequestAsync<MessageList>(HttpMethod.Get, $"/{GROUP_CHANNEL_PATH}/{channel.ChannelUrl}/messages", options, requestOptions, cancellationToken);
+        }
+
+        public virtual Task<MessageList> ListAsync(string channelType, string channelUrl, MessageListOptions options = null, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
+        {
+            return this.RequestAsync<MessageList>(HttpMethod.Get, $"/{channelType}/{channelUrl}/messages", options, requestOptions, cancellationToken);
         }
     }
 }
