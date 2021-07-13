@@ -25,7 +25,7 @@ namespace Sendbird.Services.Channels
 
         [JsonProperty("created_after")]
         [JsonConverter(typeof(DateTimeConverter))]
-        public DateTime CreatedAfter { get; set; }
+        public DateTime? CreatedAfter { get; set; }
 
         [JsonProperty("created_before")]
         [JsonConverter(typeof(DateTimeConverter))]
