@@ -12,6 +12,9 @@ namespace Sendbird.Entities
         public Dictionary<string, string> Translations { get; set; }
 
         [JsonProperty("file")]
-        public object File { get; set; } // TODO: unknowns
+        public File File { get; set; }
+
+        [JsonProperty("require_auth")] 
+        public bool RequireAuth { get; set; }
     }
 }
