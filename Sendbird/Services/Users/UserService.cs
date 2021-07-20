@@ -23,6 +23,7 @@ namespace Sendbird.Services.Users
         {
             return this.CreateEntity(options, requestOptions);
         }
+
         public virtual Task<User> CreateAsync(UserCreateOptions options, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
             return this.CreateEntityAsync(options, requestOptions, cancellationToken);

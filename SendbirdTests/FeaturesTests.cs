@@ -4,6 +4,7 @@ using Sendbird.Services.Channels;
 using Sendbird.Services.Messages;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -22,16 +23,37 @@ namespace SendbirdTests
         }
 
         [Fact]
-        public async Task GetAllMessagesTest()
+        public async Task GetTextMessagesTest()
         {
             await foreach (var channel in GetAllChannels())
             {
                 _output.WriteLine($"# {channel.Name}");
 
-                var messages = await GetChannelMessages(channel);
+                var messages = await GetChannelMessages(channel, MessageType.Message);
                 foreach (var message in messages)
                 {
-                    _output.WriteLine($"- {message.User.Nickname,-10} {message.Message} ({message.CreatedAt})");
+                    _output.WriteLine($"- {message.User?.Nickname, -10} {message.Message} ({message.CreatedAt})");
+                }
+            }
+        }
+
+        [Fact]
+        public async Task GetMessageFileSaveAsTest()
+        {
+            await foreach (var channel in GetAllChannels())
+            {
+                _output.WriteLine($"# {channel.Name}");
+
+                var messages = await GetChannelMessages(channel, MessageType.File);
+                foreach (var message in messages)
+                {
+                    _output.WriteLine($"- {message.File.Name, -10} {message.File.Url} ({message.File.Size})");
+
+                    // Save in my documents folder
+                    var folder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+                    var filePath = Path.Combine(folder, message.File.Name);
+
+                    message.File.SaveAs(filePath);
                 }
             }
         }
@@ -52,10 +74,10 @@ namespace SendbirdTests
             }
         }
 
-        private async Task<IList<TextMessage>> GetChannelMessages(GroupChannel channel)
+        private async Task<IList<TextMessage>> GetChannelMessages(GroupChannel channel, MessageType messageType)
         {
             var service = new MessageService();
-            var result = await service.ListAsync(channel, new MessageListOptions { CreatedBefore = DateTime.Now, MessageType = MessageType.Message });
+            var result = await service.ListAsync(channel, new MessageListOptions { CreatedBefore = DateTime.Now, MessageType = messageType });
 
             return result.Messages;
         }
