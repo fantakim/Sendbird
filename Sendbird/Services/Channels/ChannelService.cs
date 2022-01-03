@@ -123,6 +123,7 @@ namespace Sendbird.Services.Channels
         {
             return this.RequestAsync<GroupChannelList>(HttpMethod.Get, $"/{GROUP_CHANNEL_PATH}", options, requestOptions, cancellationToken);
         }
+
         public virtual GroupChannel Invite(string channelUrl, GroupChannelInviteOptions options = null, RequestOptions requestOptions = null)
         {
             return this.Request<GroupChannel>(HttpMethod.Post, $"/{GROUP_CHANNEL_PATH}/{channelUrl}/invite", options, requestOptions);
@@ -131,6 +132,16 @@ namespace Sendbird.Services.Channels
         public virtual Task<GroupChannel> InviteAsync(string channelUrl, GroupChannelInviteOptions options = null, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
             return this.RequestAsync<GroupChannel>(HttpMethod.Post, $"/{GROUP_CHANNEL_PATH}/{channelUrl}/invite", options, requestOptions, cancellationToken);
+        }
+
+        public virtual GroupChannel Leave(string channelUrl, GroupChannelLeaveOptions options = null, RequestOptions requestOptions = null)
+        {
+            return this.Request<GroupChannel>(HttpMethod.Put, $"/{GROUP_CHANNEL_PATH}/{channelUrl}/leave", options, requestOptions);
+        }
+
+        public virtual Task<GroupChannel> LeaveAsync(string channelUrl, GroupChannelLeaveOptions options = null, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
+        {
+            return this.RequestAsync<GroupChannel>(HttpMethod.Put, $"/{GROUP_CHANNEL_PATH}/{channelUrl}/leave", options, requestOptions, cancellationToken);
         }
         #endregion
     }

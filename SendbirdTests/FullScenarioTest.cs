@@ -109,6 +109,36 @@ namespace SendbirdTests
             await DeleteTestUserAsync(friend2);
         }
 
+        [Fact]
+        public async Task Invite_and_leave_the_channel_test()
+        {
+            var me = await CreateTestUserAsync("TEST-Fanta");
+            var friend1 = await CreateTestUserAsync("TEST-Coke");
+            var friend2 = await CreateTestUserAsync("TEST-Qoo");
+
+            // Create channel.
+            var channelUrl = await CreateTestChannelAsync(me);
+
+            // Invite friends.
+            var groupChannel = await _channelService.InviteAsync(channelUrl, new GroupChannelInviteOptions { UserIds = new[] { friend1, friend2 } });
+
+            Assert.Equal(3, groupChannel.MemberCount);
+
+            // Leave friend.
+            groupChannel = await _channelService.LeaveAsync(channelUrl, new GroupChannelLeaveOptions { UserIds = new[] { friend2 } });
+
+            // Get channel.
+            groupChannel = await _channelService.GetAsync(channelUrl, new GroupChannelGetOptions { ShowMember = true });
+
+            Assert.Equal(2, groupChannel.MemberCount);
+
+            // Clean.
+            await DeleteTestChannelAsync(channelUrl);
+            await DeleteTestUserAsync(me);
+            await DeleteTestUserAsync(friend1);
+            await DeleteTestUserAsync(friend2);
+        }
+
         private async Task<string> CreateTestUserAsync(string nickname)
         {
             string id = $"TEST-{Guid.NewGuid()}";
