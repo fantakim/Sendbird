@@ -38,7 +38,7 @@ namespace SendbirdTests
         }
 
         [Fact]
-        public async Task GetMessageFileSaveTest()
+        public async Task GetMessageFileSaveAsTest()
         {
             await foreach (var channel in GetAllChannels())
             {
