@@ -28,6 +28,37 @@ Using the [Package Manager Console]
 Install-Package Sendbird
 ```
 
+## Features
+- User
+  - Create a user
+  - Update a user
+  - Delete a user
+  - List users
+  - View a user
+  - List my group channels
+  - View push preferences
+
+- Open channel
+  - Create a channel
+  - Update a channel
+  - Delete a channel
+  - List channels
+  - View a channel
+
+- Group channel
+  - Create a channel
+  - Update a channel
+  - Delete a channel
+  - List channels
+  - View a channel
+  - Invite
+  - Leave
+
+- Messages
+  - Send a message (text/admin message)
+  - Update a message (text/admin message)
+  - List messages
+
 ## Usage
 ```c#
 SendbirdConfiguration.SetAppId("[Your Sendbird Application ID here]");
@@ -38,3 +69,6 @@ var channelService = new ChannelService();
 var messageService = new MessageService();
 
 ```
+
+## Documentation
+These API examples follows [Prepare to use API - Sendbird](https://sendbird.com/docs/chat/v3/platform-api/getting-started/prepare-to-use-api).
