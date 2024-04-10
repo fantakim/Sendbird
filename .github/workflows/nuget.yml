@@ -22,7 +22,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
       
     - name: Publish Sendbird
-      uses: rohith/publish-nuget@v2
+      uses: alirezanet/publish-nuget@v3.0.4
       with:
           PROJECT_FILE_PATH: Sendbird/Sendbird.csproj
           VERSION_REGEX: ^\s*<Version>(.*)<\/Version>\s*$
